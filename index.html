@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMA - Influencer CRM v4</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">IMA</div>
+                    <h1>IMA CRM</h1>
+                </div>
+                <p class="version">v4.0</p>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="dashboard">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-tab="checker">
+                    <span class="icon">✅</span>
+                    <span>Checker</span>
+                </button>
+                <button class="nav-item" data-tab="influencers">
+                    <span class="icon">👥</span>
+                    <span>Influencers</span>
+                </button>
+                <button class="nav-item" data-tab="settings">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle">
+                    <span class="icon">🌙</span>
+                    <span class="theme-label">Dark Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h2 id="pageTitle">Dashboard</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="exportBtn" style="display: none;">
+                        📥 Export
+                    </button>
+                    <button class="btn btn-secondary" id="importBtn" style="display: none;">
+                        📤 Import
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard Tab -->
+                <div class="tab-content" id="dashboard-tab">
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalInfluencers">0</div>
+                            <div class="stat-label">Total Influencers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="eligibleInfluencers">0</div>
+                            <div class="stat-label">Eligible</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="avgEngagement">0%</div>
+                            <div class="stat-label">Avg Engagement</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="avgViews">0</div>
+                            <div class="stat-label">Avg Views</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="avgSubscribers">0</div>
+                            <div class="stat-label">Avg Subscribers</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-sections">
+                        <div class="dashboard-section">
+                            <h3>Recent Influencers</h3>
+                            <div id="recentInfluencersContainer" class="influencers-grid">
+                                <p class="empty-state">No influencers yet. Start by checking eligibility!</p>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-section">
+                            <h3>Platform Distribution</h3>
+                            <div id="platformDistribution" class="platform-stats">
+                                <p class="empty-state">No data yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Checker Tab -->
+                <div class="tab-content hidden" id="checker-tab">
+                    <div class="checker-container">
+                        <div class="checker-panel">
+                            <!-- Influencer Info Section -->
+                            <div class="form-section">
+                                <h3>Influencer Information</h3>
+                                
+                                <div class="form-group">
+                                    <label for="platform">Platform</label>
+                                    <select id="platform" class="form-control">
+                                        <option value="youtube">YouTube</option>
+                                        <option value="instagram">Instagram</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="handle">Influencer Handle</label>
+                                    <input type="text" id="handle" class="form-control" placeholder="@influencer_name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileUrl">Channel/Profile URL</label>
+                                    <input type="url" id="profileUrl" class="form-control" placeholder="https://...">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="followers">Subscribers/Followers</label>
+                                    <input type="number" id="followers" class="form-control" placeholder="100000" min="0">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="notes">Notes</label>
+                                    <textarea id="notes" class="form-control" placeholder="Add any notes about this influencer..." rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Videos/Posts Section -->
+                            <div class="form-section">
+                                <div class="section-header">
+                                    <h3>Video/Post Entry</h3>
+                                    <span class="entry-count" id="entryCount">1 / 20</span>
+                                </div>
+
+                                <div id="videosContainer" class="videos-container">
+                                    <!-- Videos will be added here -->
+                                </div>
+
+                                <div class="video-actions">
+                                    <button class="btn btn-secondary" id="addVideoBtn">+ Add Video</button>
+                                    <button class="btn btn-secondary" id="deleteVideoBtn" disabled>- Delete Video</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Panel -->
+                        <div class="results-panel">
+                            <!-- Metrics Section -->
+                            <div class="form-section">
+                                <h3>Metrics</h3>
+                                <div id="metricsContainer" class="metrics-grid">
+                                    <div class="metric">
+                                        <div class="metric-label">Average Views</div>
+                                        <div class="metric-value" id="avgViewsMetric">0</div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-label">Average Likes</div>
+                                        <div class="metric-value" id="avgLikesMetric">0</div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-label">Average Comments</div>
+                                        <div class="metric-value" id="avgCommentsMetric">0</div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-label">Engagement Rate</div>
+                                        <div class="metric-value" id="engagementMetric">0%</div>
+                                    </div>
+                                    <div class="metric" id="ratioMetricContainer" style="display: none;">
+                                        <div class="metric-label">Views/Subscribers</div>
+                                        <div class="metric-value" id="ratioMetric">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Eligibility Settings -->
+                            <div class="form-section">
+                                <h3>Eligibility Settings</h3>
+                                
+                                <div class="form-group">
+                                    <label for="minFollowers">Minimum Followers/Subscribers</label>
+                                    <input type="number" id="minFollowers" class="form-control" placeholder="10000" min="0" value="10000">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="minEngagement">Minimum Engagement Rate (%)</label>
+                                    <input type="number" id="minEngagement" class="form-control" placeholder="2.5" min="0" step="0.1" value="2.5">
+                                </div>
+
+                                <div class="form-group" id="minRatioGroup" style="display: none;">
+                                    <label for="minRatio">Minimum Views/Subscribers Ratio (%)</label>
+                                    <input type="number" id="minRatio" class="form-control" placeholder="5" min="0" step="0.1" value="5">
+                                </div>
+                            </div>
+
+                            <!-- Eligibility Result -->
+                            <div class="form-section">
+                                <h3>Eligibility Result</h3>
+                                <div id="eligibilityResult" class="eligibility-box">
+                                    <div class="eligibility-status unknown">⚠️ Incomplete</div>
+                                    <div id="requirementsCheckList" class="requirements-list">
+                                        <!-- Requirements will be listed here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Save Influencer -->
+                            <div class="form-section">
+                                <button class="btn btn-primary full-width" id="saveInfluencerBtn" disabled>
+                                    💾 Save Influencer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Influencers Tab -->
+                <div class="tab-content hidden" id="influencers-tab">
+                    <div class="influencers-controls">
+                        <div class="search-bar">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search by handle, platform, or notes...">
+                        </div>
+
+                        <div class="filter-section">
+                            <div class="filter-group">
+                                <label>Platform:</label>
+                                <select id="platformFilter" class="form-control">
+                                    <option value="">All Platforms</option>
+                                    <option value="youtube">YouTube</option>
+                                    <option value="instagram">Instagram</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label>Status:</label>
+                                <select id="statusFilter" class="form-control">
+                                    <option value="">All Status</option>
+                                    <option value="eligible">Eligible</option>
+                                    <option value="not-eligible">Not Eligible</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label>Sort By:</label>
+                                <select id="sortFilter" class="form-control">
+                                    <option value="newest">Newest</option>
+                                    <option value="oldest">Oldest</option>
+                                    <option value="engagement-high">Highest Engagement</option>
+                                    <option value="engagement-low">Lowest Engagement</option>
+                                    <option value="subscribers-high">Highest Subscribers</option>
+                                    <option value="views-high">Highest Average Views</option>
+                                    <option value="alphabetical">Alphabetical</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="influencersContainer" class="influencers-grid">
+                        <p class="empty-state">No influencers saved yet. Check and save influencers from the Checker tab!</p>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-content hidden" id="settings-tab">
+                    <div class="settings-container">
+                        <div class="settings-section">
+                            <h3>Data Management</h3>
+                            <p class="setting-description">Export or import influencer data</p>
+                            
+                            <div class="settings-group">
+                                <div class="setting-item">
+                                    <div class="setting-label">Export Data</div>
+                                    <div class="setting-description">Download all influencers as CSV, Excel, or JSON</div>
+                                    <div class="button-group">
+                                        <button class="btn btn-secondary" id="exportCsvBtn">Export CSV</button>
+                                        <button class="btn btn-secondary" id="exportExcelBtn">Export Excel</button>
+                                        <button class="btn btn-secondary" id="exportJsonBtn">Export JSON</button>
+                                    </div>
+                                </div>
+
+                                <div class="setting-item">
+                                    <div class="setting-label">Import Data</div>
+                                    <div class="setting-description">Import previously exported JSON files</div>
+                                    <div class="button-group">
+                                        <input type="file" id="importFile" accept=".json" style="display: none;">
+                                        <button class="btn btn-secondary" id="importJsonBtn">Import JSON</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Appearance</h3>
+                            <div class="settings-group">
+                                <div class="setting-item">
+                                    <div class="setting-label">Theme</div>
+                                    <div class="setting-description">Choose light or dark mode</div>
+                                    <button class="btn btn-secondary" id="themeSettingBtn">Toggle Theme</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Storage</h3>
+                            <div class="settings-group">
+                                <div class="setting-item">
+                                    <div class="setting-label">Clear All Data</div>
+                                    <div class="setting-description">Delete all saved influencers (cannot be undone)</div>
+                                    <button class="btn btn-danger" id="clearDataBtn">Clear All Data</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>About</h3>
+                            <div class="about-info">
+                                <p><strong>IMA Influencer CRM</strong></p>
+                                <p>Version 4.0</p>
+                                <p>A professional influencer eligibility checker and CRM system</p>
+                                <p>Built with vanilla HTML, CSS, and JavaScript</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Report Modal -->
+    <div class="modal hidden" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Influencer Report</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="reportContent">
+                <!-- Report content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal hidden" id="confirmModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2 id="confirmTitle">Confirm Action</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="confirmCancel">Cancel</button>
+                <button class="btn btn-danger" id="confirmAction">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/modules/storage.js"></script>
+    <script src="assets/js/modules/api-service.js"></script>
+    <script src="assets/js/modules/calculations.js"></script>
+    <script src="assets/js/modules/export-import.js"></script>
+    <script src="assets/js/modules/ui-helpers.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
