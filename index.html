@@ -133,8 +133,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="followers">Subscribers/Followers</label>
-                                    <input type="number" id="followers" class="form-control" placeholder="100000" min="0">
+                                    <label for="followers">Subscribers/Followers (e.g., 2M, 500K, 100)</label>
+                                    <input type="text" id="followers" class="form-control number-input" placeholder="2M" data-type="followers">
                                 </div>
 
                                 <div class="form-group">
@@ -195,8 +195,8 @@
                                 <h3>Eligibility Settings</h3>
                                 
                                 <div class="form-group">
-                                    <label for="minFollowers">Minimum Followers/Subscribers</label>
-                                    <input type="number" id="minFollowers" class="form-control" placeholder="10000" min="0" value="10000">
+                                    <label for="minFollowers">Minimum Followers/Subscribers (e.g., 10K, 1M)</label>
+                                    <input type="text" id="minFollowers" class="form-control number-input" placeholder="10K" data-type="minFollowers" value="10K">
                                 </div>
 
                                 <div class="form-group">
@@ -375,6 +375,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="assets/js/modules/number-formatter.js"></script>
     <script src="assets/js/modules/storage.js"></script>
     <script src="assets/js/modules/api-service.js"></script>
     <script src="assets/js/modules/calculations.js"></script>
